@@ -1,8 +1,3 @@
-% TO DETERMINE SLOPE/INTERCEPT (CAL)
-% 1. Use the Log function to create multiple files.
-% 2. Load the SD card and run this file... select those files...
-% 3. Make sure this file runs to the end, see output.
-
 start_path = '/Volumes/CHEMI/';
 
 % Define the filter for the file types
@@ -103,18 +98,17 @@ boardTable = readtable('/Volumes/CHEMI/B00.TXT');
 subplot(rows,cols,2);
 labels = cell(16, 1);
 
-knownVals = [];
-measuredVals = [];
+diffForCal = [];
 for iFile = 1:length(filenames)
     percentDiff = zeros(1,16);
     for i = 1:16
         key = order_of_keys(i);
         values = data(key);
+        
+        % Calculate mean and std deviation
+        % mean_value = mean(values);
         percentDiff(i) = (values(iFile) - boardTable.actual_k(i)) / boardTable.actual_k(i);
         labels{i} = sprintf('%s (%.3f)', key, boardTable.actual_k(i));
-
-        knownVals = [knownVals;boardTable.actual_k(i)];
-        measuredVals = [measuredVals;values(iFile)];
     end
     plot(percentDiff);
     hold on;
@@ -132,13 +126,3 @@ ax.FontSize = 10;
 grid on;
 
 %%
-% Perform the linear fit
-p = polyfit(measuredVals, knownVals, 1);
-
-% Extract the slope and intercept
-slope = p(1);
-intercept = p(2);
-
-% Display the formula in a C-style format
-fprintf("\ny = slope * measuredVal + intercept\n");
-fprintf('knownVal = %.6f * measuredVal + %.6f;\n', slope, intercept);

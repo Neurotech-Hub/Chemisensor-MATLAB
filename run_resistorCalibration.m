@@ -1,13 +1,15 @@
+%% DEPRECATED
+
 % Read the table from the CSV file
-calTable = readtable('/Volumes/NO NAME/CAL.TXT');
-boardTable = readtable('/Volumes/NO NAME/B00.TXT');
+calTable = readtable('/Volumes/CHEMI/CAL.TXT');
+boardTable = readtable('/Volumes/CHEMI/B00.TXT');
 % calTable = readtable('CAL.TXT');
 % boardTable = readtable('B00.TXT');
 
 % Extract the columns
 channels = calTable{:, 1};
 measuredADCValues = calTable{:, 2};
-measuredRValues = calTable{:, 3} / 1000;  % Convert to kΩ
+measuredRValues = calTable{:, 3};  % Convert to kΩ
 specValues = boardTable{:, 1};
 actualValues = boardTable{:, 2};
 
@@ -41,7 +43,7 @@ for i = 1:numUniqueValues
     adjustedADCValues = currentADCValues - meanADCZeroOhm;
     
     % Convert the adjusted ADC values to resistances
-    adjustedRValues = arrayfun(@(x) equivalentResistance(x) / 1000, adjustedADCValues);
+    adjustedRValues = arrayfun(@(x) equivalentResistance(x), adjustedADCValues);
     
     % Calculate the differences between Actual and Measured values
     differences = currentMeasuredValues - currentActualValues;
@@ -65,7 +67,7 @@ for i = 1:numUniqueValues
     plot([1, 2], [currentActualValues, currentMeasuredValues], 'k-');
     
     % Set plot title and labels
-    title(sprintf('%.1f kΩ (%.2fΩ ± %.2fΩ)', currentSpecValue, meanVal*1000, stdVal*1000));
+    title(sprintf('%.1f kΩ (%.2fΩ ± %.2fΩ)', currentSpecValue, meanVal, stdVal));
     xlim([0.5 2.5]);
     xticks([1 2]);
     xticklabels({'Actual (kΩ)', 'Measured (kΩ)'});
