@@ -98,7 +98,7 @@ ax.FontSize = 10;
 ylabel('Z-Score');
 title(sprintf('Z-Score Normalized Values for Each Key (n=%i files)',length(filenames)));
 
-%%
+% determine linear fit
 boardTable = readtable('/Volumes/CHEMI/B00.TXT');
 subplot(rows,cols,2);
 labels = cell(16, 1);
@@ -131,7 +131,7 @@ xtickangle(30);
 ax.FontSize = 10;
 grid on;
 
-%%
+
 % Perform the linear fit
 p = polyfit(measuredVals, knownVals, 1);
 
@@ -142,3 +142,5 @@ intercept = p(2);
 % Display the formula in a C-style format
 fprintf("\ny = slope * measuredVal + intercept\n");
 fprintf('knownVal = %.6f * measuredVal + %.6f;\n', slope, intercept);
+
+exportgraphics(gcf,'run_logSensitivity.jpg');
