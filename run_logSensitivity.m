@@ -4,6 +4,7 @@
 % 3. Make sure this file runs to the end, see output.
 
 start_path = '/Volumes/CHEMI/';
+boardTable = readtable(fullfile(start_path,'B01.TXT'));
 
 % Define the filter for the file types
 file_filter = '*.TXT';
@@ -99,7 +100,6 @@ ylabel('Z-Score');
 title(sprintf('Z-Score Normalized Values for Each Key (n=%i files)',length(filenames)));
 
 % determine linear fit
-boardTable = readtable('/Volumes/CHEMI/B00.TXT');
 subplot(rows,cols,2);
 labels = cell(16, 1);
 
@@ -110,10 +110,10 @@ for iFile = 1:length(filenames)
     for i = 1:16
         key = order_of_keys(i);
         values = data(key);
-        percentDiff(i) = (values(iFile) - boardTable.actual_k(i)) / boardTable.actual_k(i);
-        labels{i} = sprintf('%s (%.3f)', key, boardTable.actual_k(i));
+        percentDiff(i) = (values(iFile) - boardTable.actual(i)) / boardTable.actual(i);
+        labels{i} = sprintf('%s (%.3f)', key, boardTable.actual(i));
 
-        knownVals = [knownVals;boardTable.actual_k(i)];
+        knownVals = [knownVals;boardTable.actual(i)];
         measuredVals = [measuredVals;values(iFile)];
     end
     plot(percentDiff);
